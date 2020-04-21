@@ -1,8 +1,9 @@
-# Welcome to your CDK JavaScript project!
+# Security Support Stack
 
-This is a blank project for JavaScript development with CDK.
+A simple AWS CDK script to deploy resources that resolve some CIS AWS Foundations Benchmark findings
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app. The build step is not required when using JavaScript.
+While following repetitive directions to solve several security findings of the AWS Security Hub I ended
+up wiriting this simple stack to be able to deploy the same resources on several accounts.
 
 ## Useful commands
 
@@ -10,3 +11,7 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app. The build ste
  * `cdk deploy`           deploy this stack to your default AWS account/region
  * `cdk diff`             compare deployed stack with current state
  * `cdk synth`            emits the synthesized CloudFormation template
+
+## Author
+
+Lucas Wall <wall.lucas@gmail.com>
