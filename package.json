@@ -1,0 +1,27 @@
+{
+  "name": "security_support",
+  "version": "0.1.0",
+  "bin": {
+    "security_support": "bin/security_support.js"
+  },
+  "scripts": {
+    "build": "echo \"The build step is not required when using JavaScript!\" && exit 0",
+    "cdk": "cdk",
+    "test": "jest",
+    "deploy": "cdk bootstrap && cdk deploy --require-approval never"
+  },
+  "devDependencies": {
+    "@aws-cdk/assert": "^1.33.1",
+    "aws-cdk": "^1.33.1",
+    "jest": "^25.3.0"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudtrail": "^1.33.1",
+    "@aws-cdk/aws-lambda": "^1.33.1",
+    "@aws-cdk/aws-logs": "^1.33.1",
+    "@aws-cdk/aws-s3": "^1.33.1",
+    "@aws-cdk/aws-sns": "^1.33.1",
+    "@aws-cdk/aws-ssm": "^1.33.1",
+    "@aws-cdk/core": "^1.33.1"
+  }
+}
