@@ -15,3 +15,6 @@ up wiriting this simple stack to be able to deploy the same resources on several
 ## Author
 
 Lucas Wall <wall.lucas@gmail.com>
+
+The SecurityHubFindingsToSlack lambda function is based no a sample by Amazon.
+https://github.com/aws-samples/aws-securityhub-to-slack
