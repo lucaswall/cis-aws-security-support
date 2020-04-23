@@ -1,31 +1,62 @@
 'use strict';
 
 const https = require('https');
+const url = require('url');
+
+const prefix = process.env.SLACK_PREFIX;
+const webhookPath = process.env.SLACK_WEBHOOKPATH;
+
+function postMessage(message, callback) {
+    const body = JSON.stringify(message);
+    const options = url.parse(webhookPath);
+    options.method = 'POST';
+    options.headers = {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+    };
+
+    const postReq = https.request(options, (res) => {
+        const chunks = [];
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => chunks.push(chunk));
+        res.on('end', () => {
+            if (callback) {
+                callback({
+                    body: chunks.join(''),
+                    statusCode: res.statusCode,
+                    statusMessage: res.statusMessage,
+                });
+            }
+        });
+        return res;
+    });
+
+    postReq.write(body);
+    postReq.end();
+}
 
 exports.handler = (event, context, callback) => {
     console.log("EVENT RECEIVED: ", JSON.stringify(event));
 
     try {
 
-		const prefix = process.env.SLACK_PREFIX;
-		const webhookPath = process.env.SLACK_WEBHOOKPATH;
-
         const message = event.Records[0].Sns.Message;
         const parsedMessage = JSON.parse(message);
-        const payload = JSON.stringify({
+        const payload = {
             text: `:rotating_light: [${prefix}] *${parsedMessage.AlarmName}* ${parsedMessage.StateChangeTime} ${parsedMessage.Region} (${parsedMessage.AWSAccountId})`
-        });
-
-        const options = {
-            hostname: 'hooks.slack.com',
-            method: 'POST',
-            path: webhookPath,
         };
 
-        const req = https.request(options, (res) => res.on("data", () => callback(null, "Success")));
-        req.on("error", (error) => callback(JSON.stringify(error)));
-        req.write(payload);
-        req.end();
+        postMessage(payload, (response) => {
+            if (response.statusCode < 400) {
+                console.info('Message posted successfully');
+                callback(null);
+            } else if (response.statusCode < 500) {
+                console.error(`Error posting message to Slack API: ${response.statusCode} - ${response.statusMessage}`);
+                callback(null);
+            } else {
+                callback(`Server error when processing message: ${response.statusCode} - ${response.statusMessage}`);
+            }
+        });
 
     } catch (error) {
         console.error(error);
