@@ -72,7 +72,7 @@ exports.handler = async (event, context, callback) => {
                 msg += await processAccessKeysForUser(user.UserName);
                 if (user.PasswordLastUsed) {
                     const age = getAgeInDays(user.PasswordLastUsed);
-                    if (age >= 30) {
+                    if (age >= 80) {
                         msg += `${user.UserName} no login in ${age} days.\n`;
                     }
                 }
